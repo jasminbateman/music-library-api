@@ -1,0 +1,19 @@
+{
+  "name": "music-library-api",
+  "version": "1.0.0",
+  "description": "This repo contains the integration test suite for the Music Library API.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasminbateman/music-library-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jasminbateman/music-library-api/issues"
+  },
+  "homepage": "https://github.com/jasminbateman/music-library-api#readme"
+}
