@@ -4,16 +4,32 @@
   "description": "This repo contains the integration test suite for the Music Library API.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "node scripts/create-database.js test",
+    "test": "mocha __tests__/**/*.js --exit --recursive --timeout 60000 --file ./__tests__/test-setup.js",
+    "posttest": "node scripts/drop-database.js",
+    "prestart": "node scripts/create-database.js",
+    "start": "nodemon -r dotenv/config index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jasminbateman/music-library-api.git"
   },
-  "author": "",
+  "author": "Jasmin Bateman",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jasminbateman/music-library-api/issues"
   },
-  "homepage": "https://github.com/jasminbateman/music-library-api#readme"
+  "homepage": "https://github.com/jasminbateman/music-library-api#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5",
+    "nodemon": "^2.0.6",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "supertest": "^6.0.1"
+  }
 }
