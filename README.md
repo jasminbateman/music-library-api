@@ -1,5 +1,7 @@
 # MySQL Music Library API Project
 
+## My first backend bootcamp project!
+
 This repo contains the integration test suite for the Music Library API. 
 
 The library API stores information about artists, albums and songs. It uses CRUD REST API to interact with a MySQL database.

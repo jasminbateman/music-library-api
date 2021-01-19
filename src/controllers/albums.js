@@ -52,7 +52,7 @@ exports.removeAlbum = (req, res) => {
     const { id } = req.params;
     Album.destroy({ where: { id } }).then(rowsDeleted => {
         if (!rowsDeleted) {
-            res.status(404).json({ error: 'The album could not be found.' });
+            res.status(404).json({ error: 'This album does not exist.' });
         } else {
             res.status(204).json(rowsDeleted);
         }

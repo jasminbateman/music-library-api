@@ -20,8 +20,8 @@ describe('/albums', () => {
       await Artist.destroy({ where: {} });
       await Album.destroy({ where: {} });
       artist = await Artist.create({
-        name: 'Tame Impala',
-        genre: 'Rock',
+        name: 'Taylor Swift',
+        genre: 'Pop',
       });
     } catch (err) {
       console.log(err);
@@ -33,15 +33,15 @@ describe('/albums', () => {
       request(app)
         .post(`/artists/${artist.id}/albums`)
         .send({
-          name: 'InnerSpeaker',
-          year: 2010,
+          name: 'evermore',
+          year: 2020,
         })
         .then((res) => {
           expect(res.status).to.equal(201);
 
           Album.findByPk(res.body.id, { raw: true }).then((album) => {
-            expect(album.name).to.equal('InnerSpeaker');
-            expect(album.year).to.equal(2010);
+            expect(album.name).to.equal('evermore');
+            expect(album.year).to.equal(2020);
             // expect(album.artistId).to.equal(artist.id);
             done();
           }) .catch(error => done(error))
@@ -68,24 +68,13 @@ describe('/albums', () => {
     });
   });
   describe('with albums in the database', () => {
-    let albums, artists;
-    beforeEach((done) => {
-        Promise.all([
-            Artist.create({ name: 'Taylor Swift', genre: 'Pop' }),
-            Artist.create({ name: 'Miley Cyrus', genre: 'Pop' }),
-            Artist.create({ name: 'Dave Brubeck', genre: 'Jazz' }),
-        ]).then((documents) => {
-            artists = documents;
-            done();
-        })
-        .catch(error => done(error))
-    });
+    let albums;
 
     beforeEach((done) => {
         Promise.all([
-            Album.create({ artistName: 'Taylor Swift', name: 'evermore', year: 2020 }),
-            Album.create({ artistName: 'Taylor Swift', name: 'folklore', year: 2020 }),
-            Album.create({ artistName: 'Miley Cyrus', name: 'Plastic Hearts', year: 2020 }),
+            Album.create({ artistId: artist.id, name: 'evermore', year: 2020 }),
+            Album.create({ artistId: artist.id, name: 'folklore', year: 2020 }),
+            Album.create({ artistId: artist.id, name: 'Lover', year: 2019 }),
         ]).then((documents) => {
             albums = documents;
             done();
@@ -102,7 +91,6 @@ describe('/albums', () => {
                     expect(res.body.length).to.equal(3);
                     res.body.forEach((album) => {
                         const expected = albums.find(a => a.id === album.id);
-                        expect(album.artistName).to.equal(expected.artistName);
                         expect(album.name).to.equal(expected.name);
                         expect(album.year).to.equal(expected.year);
                     });
@@ -156,6 +144,7 @@ describe('/albums', () => {
         it('returns a 404 if the album does not exist', (done) => {
             request(app)
                 .patch('/albums/12345')
+                .send({ year: 2021 })
                 .then((res) => {
                     expect(res.status).to.equal(404);
                     expect(res.body.error).to.equal('The album could not be found.');
@@ -171,12 +160,23 @@ describe('/albums', () => {
             .delete(`/albums/${album.id}`)
             .then((res) => {
               expect(res.status).to.equal(204);
-              Artist.findByPk(album.id, { raw: true }).then((updatedAlbum) => {
+              Album.findByPk(album.id, { raw: true }).then((updatedAlbum) => {
                 expect(updatedAlbum).to.equal(null);
                 done();
               })
             .catch(error => done(error))
             });
+        });
+
+        it('returns a 404 if the album does not exist', (done) => {
+          request(app)
+            .delete('/albums/12345')
+            .then((res) => {
+              expect(res.status).to.equal(404);
+              expect(res.body.error).to.equal('This album does not exist.');
+              done();
+            })
+            .catch(error => done(error))
         });
     });
     });

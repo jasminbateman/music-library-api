@@ -18,7 +18,11 @@ const {  createAlbum,
 
 const {  createSong,
          listSongs,
-         getSongsByAlbum
+         getSongsByAlbum,
+         getSongsByArtist,
+         findSongById,
+         updateSong,
+         removeSong
    } = require('./controllers/songs');
 
 app.use(express.json());
@@ -56,5 +60,13 @@ app.post('/albums/:albumId/songs', createSong);
 app.get('/songs', listSongs);
 
 app.get('/albums/:albumId/songs', getSongsByAlbum);
+
+app.get('/artists/:artistId/songs', getSongsByArtist);
+
+app.get('/songs/:songId', findSongById);
+
+app.patch('/songs/:songId', updateSong);
+
+app.delete('/songs/:songId', removeSong);
 
 module.exports = app
